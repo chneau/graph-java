@@ -12,6 +12,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.graphhopper:graphhopper-core:0.13.0'
     testImplementation 'junit:junit:4.12'
 }
 

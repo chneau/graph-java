@@ -6,7 +6,10 @@ A graph with Graph Simplification, Dijkstra and OSM data loader - in java
 ## useful commands (self reminder)
 
 ```bash
-./gradlew test # run tests
+./gradlew assemble # assemble project, can be helpfull with vscode `ctrl+shift+P-> Java: Update project configuration`
+```
+```bash
+./gradlew build # run tests compilation and checks
 ```
 ```bash
 ./gradlew spotlessApply # format source code
