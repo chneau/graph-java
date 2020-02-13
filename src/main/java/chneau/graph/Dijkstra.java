@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Dijkstra {
-    public class Result {
+public  class Dijkstra {
+    public static class Result {
         public int distance;
         public List<Integer> path = new ArrayList<>();
     }
 
-    public class Info {
+    public static class Info {
         public int id;
         public List<Integer> path = new ArrayList<>();
 
@@ -21,7 +21,7 @@ public class Dijkstra {
 
     public static Result shortest(Graph g, int from, int to) {
         var vertices = new HashMap<Integer, Info>();
-        var i = new Info(from);
+        var i = new Dijkstra.Info(from);
         vertices.put(from, i);
 
         return null;
