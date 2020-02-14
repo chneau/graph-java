@@ -1,6 +1,9 @@
 package chneau.graph;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Dijkstra {
@@ -9,9 +12,8 @@ public class Dijkstra {
         public List<Integer> path = new ArrayList<>();
     }
 
-    public static class Info {
+    public static class Info extends Result {
         public int id;
-        public List<Integer> path = new ArrayList<>();
 
         public Info(int id) {
             this.id = id;
@@ -22,41 +24,36 @@ public class Dijkstra {
         var vertices = new HashMap<Integer, Info>();
         var i = new Dijkstra.Info(from);
         vertices.put(from, i);
-
-        var visited = new HashMap<Integer, Boolean>();
-        var toVisit = new ArrayList<>(); //SOS
+        var visited = new HashSet<Integer>();
+        var toVisit = new LinkedList<Info>(); // to extends with insertOrdered *1
         insertOrdered(vertices.get(from), toVisit);
-        boolean found = false; //you never set it to true
-        int aux = toVisit.size();
-        while(aux > 0 && !found){
+        while (toVisit.size() > 0) {
             var visiting = popFront(toVisit);
-            for (int j = 0; j < g.vertices.size(); j++) {
-                //S O SSSSSSSSS
-                List<Integer> k = g.vertices.get(visiting.id).order;
-                if (visited.containsKey(k)) {
+            for (var id : g.vertices.get(visiting.id).order) {
+                if (visited.contains(id)) {
                     continue;
                 }
-                var v = g.vertices.get(visiting.id).neighbours.get(k);
-                var lp = (vertices.get(visiting.id).path).size();
-
-                if (!vertices.containsKey(k)) {
-                    vertices.get(k).id = k;
-                    vertices.get(k).distance = v + vertices.get(visiting.id).distance;
-                    vertices.get(k).path =  append(vertices.get(visiting.id).path[:lp:lp], k);
-                    toVisit.insertOrdered(vertices.get(k), toVisit);
+                var v = g.vertices.get(visiting.id).neighbours.get(id);
+                var info = vertices.get(id);
+                if (!vertices.containsKey(id)) {
+                    info.id = id;
+                    info.distance = v + vertices.get(visiting.id).distance;
+                    info.path = new ArrayList<>(vertices.get(visiting.id).path);
+                    info.path.add(id);
+                    insertOrdered(info, toVisit);
                 } else {
                     var newDistance = v + vertices.get(visiting.id).distance;
-                    if (vertices.get(k).distance > newDistance) {
-                        vertices.get(k).distance = newDistance;
-                        vertices.get(k).path =  append(vertices.get(visiting.id).path[:lp:lp], k);
+                    if (info.distance > newDistance) {
+                        info.distance = newDistance;
+                        info.path = new ArrayList<>(vertices.get(visiting.id).path);
+                        info.path.add(id);
                     }
                 }
             }
             if (visiting.id == to) {
                 break;
             }
-            visited.put(visiting.id, true);
-            aux--;
+            visited.add(visiting.id);
         }
         if (!vertices.containsKey(to)) {
             return null;
@@ -64,13 +61,13 @@ public class Dijkstra {
         return vertices.get(to);
     }
 
-    private static Info popFront(ArrayList<Object> toVisit) {
+    private static Info popFront(List<Info> toVisit) {
         var e = toVisit.get(0);
         toVisit.remove(0);
         return e;
     }
 
-    private static void insertOrdered(Info v, ArrayList<Object> toVisit) {
+    private static void insertOrdered(Info v, List<Info> toVisit) { // *1
         if (toVisit.size() == 0) {
             toVisit.add(0, v);
             return;
