@@ -1,6 +1,7 @@
 package chneau.graph;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -15,14 +16,16 @@ public class Dijkstra {
     public static class Info extends Result {
         public int id;
 
-        public Info(int id) {
+        public Info(int id, List<Integer> path, int distance) {
             this.id = id;
+            this.path = path;
+            this.distance = distance;
         }
     }
 
     public static Result shortest(Graph g, int from, int to) {
         var vertices = new HashMap<Integer, Info>();
-        var i = new Dijkstra.Info(from);
+        var i = new Dijkstra.Info(from, Arrays.asList(from),0);
         vertices.put(from, i);
         var visited = new HashSet<Integer>();
         var toVisit = new LinkedList<Info>(); // to extends with insertOrdered *1
@@ -34,15 +37,15 @@ public class Dijkstra {
                     continue;
                 }
                 var v = g.vertices.get(visiting.id).neighbours.get(id);
-                var info = vertices.get(id);
                 if (!vertices.containsKey(id)) {
-                    info.id = id;
-                    info.distance = v + vertices.get(visiting.id).distance;
-                    info.path = new ArrayList<>(vertices.get(visiting.id).path);
-                    info.path.add(id);
+                    var newPath = new ArrayList<>(vertices.get(visiting.id).path);
+                    newPath.add(id);
+                    var info = new Dijkstra.Info(id, newPath,v + vertices.get(visiting.id).distance);
+                    vertices.put(id, info);
                     insertOrdered(info, toVisit);
                 } else {
                     var newDistance = v + vertices.get(visiting.id).distance;
+                    var info = vertices.get(id);
                     if (info.distance > newDistance) {
                         info.distance = newDistance;
                         info.path = new ArrayList<>(vertices.get(visiting.id).path);
@@ -74,7 +77,7 @@ public class Dijkstra {
             return;
         }
         if (back.distance < v.distance) {
-            toVisit.add(toVisit.size() + 1, v);
+            toVisit.addLast(v);
             return;
         }
         int i = 0;
