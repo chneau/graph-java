@@ -67,34 +67,30 @@ public class Dijkstra {
         return e;
     }
 
-    private static void insertOrdered(Info v, List<Info> toVisit) { // *1
-        if (toVisit.size() == 0) {
-            toVisit.add(0, v);
+    private static void insertOrdered(Info v, LinkedList<Info> toVisit) { // *1
+        var back = toVisit.peekLast();
+        if (back == null) {
+            toVisit.push(v);
             return;
         }
-        var back = toVisit.get(toVisit.size());
-        // Help
         if (back.distance < v.distance) {
             toVisit.add(toVisit.size() + 1, v);
-            ;
             return;
         }
         int i = 0;
-        Info current = (Info) toVisit.get(i);
+        Info current = toVisit.peekFirst();
         var next = current;
-        // heeeelp
-        while (current.path.size() < v.path.size() && current.id != v.id) {
+        while (current.distance < v.distance && current.id != v.id) {
             i++;
-            next = (Info) toVisit.get(i);
-            if (next == null) {
+            if (i == toVisit.size() - 1) {
                 break;
             }
+            next = toVisit.get(i);
             current = next;
         }
         if (current.id == v.id) {
             return;
         }
         toVisit.add(i + 1, v);
-
     }
 }
