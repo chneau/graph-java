@@ -7,12 +7,12 @@ import java.util.List;
 
 public class Simplify {
 
-    public void removeEdge(Vertex v, Integer edge) {
+    public static void removeEdge(Vertex v, Integer edge) {
         v.neighbours.remove(edge);
         v.order.remove(edge);
     }
 
-    public void simplifyGraph(Graph g) {
+    public static void simplifyGraph(Graph g) {
         int l = g.vertices.size();
         while (true) {
             simplify(g);
@@ -30,7 +30,7 @@ public class Simplify {
         }
     }
 
-    private void simplify(Graph g) {
+    private static void simplify(Graph g) {
         var optimisable = new HashSet<Integer>();
         var where = new HashMap<Integer, List<Integer>>();
         for (var e : g.vertices.entrySet()) {
@@ -78,7 +78,7 @@ public class Simplify {
         }
     }
 
-    private void biSimplify(Graph g) {
+    private static void biSimplify(Graph g) {
         var optimisable = new HashSet<Integer>();
         var where = new HashMap<Integer, List<Integer>>();
         for (var e : g.vertices.entrySet()) {
@@ -148,7 +148,7 @@ public class Simplify {
         }
     }
 
-    private boolean simplifyVertices(Graph g, int from, int mid, int to) {
+    private static boolean simplifyVertices(Graph g, int from, int mid, int to) {
         if (g.vertices.get(from).neighbours.get(mid) == null) {
             return false;
         }
