@@ -1,19 +1,15 @@
 package chneau.graph;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class Simplify {
 
-    public void removeEdge(Vertex v, int edge) {
+    public void removeEdge(Vertex v, Integer edge) {
         v.neighbours.remove(edge);
-        for (int i = 0; i < v.order.size(); i++) {
-            if (v.order.get(i) == edge) {
-                //Not sure about how to translate this
-                // v.order = append(v.Order[:i], v.Order[i+1:]...)
-                break;
-            }
-        }
+        v.order.remove(edge);
     }
 
     public void simplifyGraph(Graph g) {
@@ -36,36 +32,32 @@ public class Simplify {
 
     private void simplify(Graph g) {
         var optimisable = new HashSet<Integer>();
-        // Helppp, what is the equivalent to this in Java?
-        // where = map[int][]int{};
-        var where = new HashMap<Integer, Integer>();
-        for (int k = 0; k < g.vertices.size(); k++) {
-            //Not sure about this ----> for k, v := range g
-            for (Vertex v : g.vertices) {
-                if (v.order.size() == 1) { // if edge only going to one vertix
-                    optimisable.add(k);
-                }
-                for (int i = 0; i < v.order.size(); i++) { // map where a vertix appear
-                    where.put(i, k);
-                }
+        var where = new HashMap<Integer, List<Integer>>();
+        for (var e : g.vertices.entrySet()) {
+            var k = e.getKey();
+            var v = e.getValue();
+            if (v.order.size() == 1) { // if edge only going to one vertix
+                optimisable.add(k);
+            }
+            for (int i = 0; i < v.order.size(); i++) { // map where a vertix appear
+                var list = where.getOrDefault(i, new ArrayList<Integer>());
+                list.add(k);
+                where.put(i, list);
             }
         }
-        for (int k = 0; k < optimisable.size(); k++) {
-            if (where.get(k).size() != 1) { // remove vertix with multiple parents
+        for (var k : optimisable) {
+            if (where.get(k).size() != 2) { // remove vertex with multiple parents
                 optimisable.remove(k);
             }
         }
-        for (int k = 0; k < where.size(); k++) {
+        for (var k : where.keySet()) {
             if (!optimisable.contains(k)) { // remove useless data on where map
                 where.remove(k);
             }
         }
-        int mid = 0;
-        while (mid < optimisable.size()) {
-            //SOS, I want the key of where[mid]
-            int from = where.get(mid);
+        for (var mid : optimisable) {
+            int from = where.get(mid).get(0);
             if (mid == from) { // a round has been reduced
-                // removeEdge(g.vertices.get(from), mid)
                 continue;
             }
             if (!g.vertices.containsKey(from)) {
@@ -78,47 +70,42 @@ public class Simplify {
             if (from == to) { // don't remove end of bi directional path
                 continue;
             }
-            boolean ok = simplifyVertices(g, from, mid, to);
+            var ok = simplifyVertices(g, from, mid, to);
             if (!ok) {
                 System.out.println("NOT OK FOR" + from + " " + mid + " " + to);
             }
             g.vertices.remove(mid);
-            mid++;
         }
     }
 
     private void biSimplify(Graph g) {
         var optimisable = new HashSet<Integer>();
-        // Helppp, what is the equivalent to this in Java?
-        // where = map[int][]int{};
-        var where = new HashMap<Integer, Integer>();
-        for (int k = 0; k < g.vertices.size(); k++) {
-            //Not sure about this ----> for k, v := range g
-            for (Vertex v : g.vertices) {
-                if (v.order.size() == 2) { // if edge only going to one vertix
-                    optimisable.add(k);
-                }
-                for (int i = 0; i < v.order.size(); i++) { // map where a vertix appear
-                    where.put(i, k);
-                }
+        var where = new HashMap<Integer, List<Integer>>();
+        for (var e : g.vertices.entrySet()) {
+            var k = e.getKey();
+            var v = e.getValue();
+            if (v.order.size() == 2) { // if edge only going to one vertix
+                optimisable.add(k);
+            }
+            for (int i = 0; i < v.order.size(); i++) { // map where a vertix appear
+                var list = where.getOrDefault(i, new ArrayList<Integer>());
+                list.add(k);
+                where.put(i, list);
             }
         }
-        for (int k = 0; k < optimisable.size(); k++) {
+        for (var k : optimisable) {
             if (where.get(k).size() != 2) { // remove vertex with multiple parents
                 optimisable.remove(k);
             }
         }
-        for (int k = 0; k < where.size(); k++) {
+        for (var k : where.keySet()) {
             if (!optimisable.contains(k)) { // remove useless data on where map
                 where.remove(k);
             }
         }
-        int mid;
-        for (mid = 0; mid < optimisable.size(); mid++) {
-            //SOS, I want the key of where[mid] and then the value of where[mid]
-            int from = where.get(mid);
-            int to = where.get(mid);
-
+        for (var mid : optimisable) {
+            int from = where.get(mid).get(0);
+            int to = where.get(mid).get(1);
             if (!g.vertices.containsKey(from)) {
                 continue;
             }
@@ -162,7 +149,6 @@ public class Simplify {
     }
 
     private boolean simplifyVertices(Graph g, int from, int mid, int to) {
-
         if (g.vertices.get(from).neighbours.get(mid) == null) {
             return false;
         }
