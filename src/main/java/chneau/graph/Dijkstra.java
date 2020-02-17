@@ -25,7 +25,7 @@ public class Dijkstra {
 
     public static Result shortest(Graph g, int from, int to) {
         var vertices = new HashMap<Integer, Info>();
-        var i = new Dijkstra.Info(from, Arrays.asList(from),0);
+        var i = new Dijkstra.Info(from, Arrays.asList(from), 0);
         vertices.put(from, i);
         var visited = new HashSet<Integer>();
         var toVisit = new LinkedList<Info>(); // to extends with insertOrdered *1
@@ -40,7 +40,8 @@ public class Dijkstra {
                 if (!vertices.containsKey(id)) {
                     var newPath = new ArrayList<>(vertices.get(visiting.id).path);
                     newPath.add(id);
-                    var info = new Dijkstra.Info(id, newPath,v + vertices.get(visiting.id).distance);
+                    var info =
+                            new Dijkstra.Info(id, newPath, v + vertices.get(visiting.id).distance);
                     vertices.put(id, info);
                     insertOrdered(info, toVisit);
                 } else {

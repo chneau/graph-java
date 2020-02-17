@@ -7,12 +7,12 @@ import java.util.List;
 
 public class Simplify {
 
-    public static void removeEdge(Vertex v, Integer edge) {
+    private static void removeEdge(Vertex v, Integer edge) {
         v.neighbours.remove(edge);
         v.order.remove(edge);
     }
 
-    public static void simplifyGraph(Graph g) {
+    public static void graph(Graph g) {
         int l = g.vertices.size();
         while (true) {
             simplify(g);
@@ -39,18 +39,19 @@ public class Simplify {
             if (v.order.size() == 1) { // if edge only going to one vertix
                 optimisable.add(k);
             }
-            for (int i = 0; i < v.order.size(); i++) { // map where a vertix appear
+            for (var i : v.order) { // map where a vertix appear
                 var list = where.getOrDefault(i, new ArrayList<Integer>());
                 list.add(k);
                 where.put(i, list);
             }
         }
-        for (var k : optimisable) {
-            if (where.get(k).size() != 2) { // remove vertex with multiple parents
+        for (var k : new HashSet<>(optimisable)) {
+            var w = where.get(k);
+            if (w == null || w.size() != 1) { // remove vertex with multiple parents
                 optimisable.remove(k);
             }
         }
-        for (var k : where.keySet()) {
+        for (var k : new HashSet<>(where.keySet())) {
             if (!optimisable.contains(k)) { // remove useless data on where map
                 where.remove(k);
             }
@@ -87,18 +88,18 @@ public class Simplify {
             if (v.order.size() == 2) { // if edge only going to one vertix
                 optimisable.add(k);
             }
-            for (int i = 0; i < v.order.size(); i++) { // map where a vertix appear
+            for (var i : v.order) { // map where a vertix appear
                 var list = where.getOrDefault(i, new ArrayList<Integer>());
                 list.add(k);
                 where.put(i, list);
             }
         }
-        for (var k : optimisable) {
+        for (var k : new HashSet<>(optimisable)) {
             if (where.get(k).size() != 2) { // remove vertex with multiple parents
                 optimisable.remove(k);
             }
         }
-        for (var k : where.keySet()) {
+        for (var k : new HashSet<>(where.keySet())) {
             if (!optimisable.contains(k)) { // remove useless data on where map
                 where.remove(k);
             }
