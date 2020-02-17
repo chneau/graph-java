@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Vertex {
-    public final Map<Integer, Integer> neighbours = new HashMap<>();
+    public final Map<Integer, Integer> neighbours = new HashMap<>(); // TODO: Edge
     public List<Integer> order = new ArrayList<>();
 
     public void sort() {
