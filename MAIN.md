@@ -75,33 +75,50 @@ public class Main {
         var fis = new FileInputStream(f);
         var zis = new ZipInputStream(fis);
         var sc = new Scanner(zis);
+        var trip = new Trip();
         for (var e = zis.getNextEntry(); e != null; e = zis.getNextEntry()) {
-            switch (e.getName()) {
+            /* switch (e.getName()) {
                 case "calendar.txt":
+                    sc.nextLine();
                     while (sc.hasNextLine()) {
                         var line = sc.nextLine();
+                        String[] fields = ((String) line).split(",");
+                        trip.monday.add(Integer.parseInt(fields[1]));
+                        trip.tuesday.add(Integer.parseInt(fields[2]));
+                        trip.wednesday.add(Integer.parseInt(fields[3]));
+                        trip.thursday.add(Integer.parseInt(fields[4]));
+                        trip.friday.add(Integer.parseInt(fields[5]));
+                        trip.saturday.add(Integer.parseInt(fields[6]));
+                        trip.sunday.add(Integer.parseInt(fields[7]));
+                        trip.start_date.add(Integer.parseInt(fields[8]));
+                        trip.end_date.add(Integer.parseInt(fields[9]));
                         System.out.println(line);
                     }
                     break;
                 case "stops.txt":
+                    sc.nextLine();
                     while (sc.hasNextLine()) {
                         var line = sc.nextLine();
                         System.out.println(line);
                     }
                     break;
                 case "stop_times.txt":
+                    sc.nextLine();
                     while (sc.hasNextLine()) {
                         var line = sc.nextLine();
                         System.out.println(line);
                     }
                     break;
                 case "trips.txt":
+                    sc.nextLine();
                     while (sc.hasNextLine()) {
                         var line = sc.nextLine();
+                        String[] fields = ((String) line).split(",");
+                        trip.service_id.add(Integer.parseInt(fields[1]));
                         System.out.println(line);
                     }
                     break;
-            }
+            } */
         }
         zis.close();
         sc.close();
