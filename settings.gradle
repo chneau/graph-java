@@ -1,1 +1,11 @@
 rootProject.name = 'graph'
+
+
+sourceControl {
+    gitRepository("https://github.com/chneau/openhours-java.git") {
+        producesModule("chneau:openhours")
+    }
+    gitRepository("https://github.com/chneau/timetable-java.git") {
+        producesModule("chneau:timetable")
+    }
+}

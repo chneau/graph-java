@@ -14,6 +14,8 @@ repositories {
 dependencies {
     implementation 'com.graphhopper:graphhopper-core:0.13.0'
     implementation 'com.graphhopper:graphhopper-reader-osm:0.13.0'
+    implementation "chneau:openhours"
+    implementation "chneau:timetable"
     testImplementation 'junit:junit:4.12'
 }
 
