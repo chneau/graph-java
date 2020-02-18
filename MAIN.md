@@ -51,3 +51,45 @@ public class Main {
     }
 }
 ```
+
+## Reading GTFS data
+
+```java
+package chneau.graph;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Scanner;
+import java.util.zip.ZipInputStream;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        var f = new File("private/leeds.gtfs");
+        var fis = new FileInputStream(f);
+        var zis = new ZipInputStream(fis);
+        for (var e = zis.getNextEntry(); e != null; e = zis.getNextEntry()) {
+            var sc = new Scanner(zis);
+            switch (e.getName()) {
+                case "stops.txt":
+                    while (sc.hasNextLine()) {
+                        System.out.println(sc.nextLine());
+                    }
+                    break;
+                case "stop_times.txt":
+                    while (sc.hasNextLine()) {
+                        System.out.println(sc.nextLine());
+                    }
+                    break;
+                case "trips.txt":
+                    while (sc.hasNextLine()) {
+                        System.out.println(sc.nextLine());
+                    }
+                    break;
+            }
+        }
+        zis.close();
+    }
+}
+
+```
