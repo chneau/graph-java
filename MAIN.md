@@ -54,7 +54,7 @@ public class Main {
 
 ## Reading GTFS data
 
-```java
+```java 
 package chneau.graph;
 
 import java.io.File;
@@ -62,34 +62,51 @@ import java.io.FileInputStream;
 import java.util.Scanner;
 import java.util.zip.ZipInputStream;
 
+// trips.txt read column service_id
+// stop_times.txt        ^ trip_id
+//                              get stop_id,arrival_time,departure_time
+// calendar.txt          ^ monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date
+// stops.txt                    ^ stop_id
+//                              get stop_lat,stop_lon
 public class Main {
 
     public static void main(String[] args) throws Exception {
         var f = new File("private/leeds.gtfs");
         var fis = new FileInputStream(f);
         var zis = new ZipInputStream(fis);
+        var sc = new Scanner(zis);
         for (var e = zis.getNextEntry(); e != null; e = zis.getNextEntry()) {
-            var sc = new Scanner(zis);
             switch (e.getName()) {
+                case "calendar.txt":
+                    while (sc.hasNextLine()) {
+                        var line = sc.nextLine();
+                        System.out.println(line);
+                    }
+                    break;
                 case "stops.txt":
                     while (sc.hasNextLine()) {
-                        System.out.println(sc.nextLine());
+                        var line = sc.nextLine();
+                        System.out.println(line);
                     }
                     break;
                 case "stop_times.txt":
                     while (sc.hasNextLine()) {
-                        System.out.println(sc.nextLine());
+                        var line = sc.nextLine();
+                        System.out.println(line);
                     }
                     break;
                 case "trips.txt":
                     while (sc.hasNextLine()) {
-                        System.out.println(sc.nextLine());
+                        var line = sc.nextLine();
+                        System.out.println(line);
                     }
                     break;
             }
         }
         zis.close();
+        sc.close();
     }
 }
+
 
 ```
