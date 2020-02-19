@@ -2,11 +2,14 @@
 .ONESHELL:
 .NOTPARALLEL:
 .EXPORT_ALL_VARIABLES:
-.PHONY:
+.PHONY: build
 
 NAME=$(shell basename $(CURDIR))
 
-run: dldata
+run: build
+
+build:
+	./gradlew spotlessApply build
 
 dldata:
 	mkdir private
