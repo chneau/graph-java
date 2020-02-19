@@ -59,13 +59,15 @@ package chneau.graph;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Scanner;
+import java.io.InputStreamReader;
 import java.util.zip.ZipInputStream;
+import org.apache.commons.csv.CSVFormat;
 
 // trips.txt read column service_id
 // stop_times.txt        ^ trip_id
 //                              get stop_id,arrival_time,departure_time
-// calendar.txt          ^ monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date
+// calendar.txt          ^
+// monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date
 // stops.txt                    ^ stop_id
 //                              get stop_lat,stop_lon
 public class Main {
@@ -74,56 +76,59 @@ public class Main {
         var f = new File("private/leeds.gtfs");
         var fis = new FileInputStream(f);
         var zis = new ZipInputStream(fis);
-        var sc = new Scanner(zis);
-        var trip = new Trip();
+        var isr = new InputStreamReader(zis);
         for (var e = zis.getNextEntry(); e != null; e = zis.getNextEntry()) {
-            /* switch (e.getName()) {
+            switch (e.getName()) {
                 case "calendar.txt":
-                    sc.nextLine();
-                    while (sc.hasNextLine()) {
-                        var line = sc.nextLine();
-                        String[] fields = ((String) line).split(",");
-                        trip.monday.add(Integer.parseInt(fields[1]));
-                        trip.tuesday.add(Integer.parseInt(fields[2]));
-                        trip.wednesday.add(Integer.parseInt(fields[3]));
-                        trip.thursday.add(Integer.parseInt(fields[4]));
-                        trip.friday.add(Integer.parseInt(fields[5]));
-                        trip.saturday.add(Integer.parseInt(fields[6]));
-                        trip.sunday.add(Integer.parseInt(fields[7]));
-                        trip.start_date.add(Integer.parseInt(fields[8]));
-                        trip.end_date.add(Integer.parseInt(fields[9]));
-                        System.out.println(line);
+                    {
+                        var csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(isr);
+                        for (var record : csvParser) {
+                            System.out.println(record.get("service_id"));
+                            System.out.println(record.get("monday"));
+                            System.out.println(record.get("tuesday"));
+                            System.out.println(record.get("wednesday"));
+                            System.out.println(record.get("thursday"));
+                            System.out.println(record.get("friday"));
+                            System.out.println(record.get("saturday"));
+                            System.out.println(record.get("sunday"));
+                            System.out.println(record.get("start_date"));
+                            System.out.println(record.get("end_date"));
+                        }
                     }
                     break;
                 case "stops.txt":
-                    sc.nextLine();
-                    while (sc.hasNextLine()) {
-                        var line = sc.nextLine();
-                        System.out.println(line);
+                    {
+                        var csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(isr);
+                        for (var record : csvParser) {
+                            System.out.println(record.get("stop_id"));
+                            System.out.println(record.get("stop_lat"));
+                            System.out.println(record.get("stop_lon"));
+                        }
                     }
                     break;
                 case "stop_times.txt":
-                    sc.nextLine();
-                    while (sc.hasNextLine()) {
-                        var line = sc.nextLine();
-                        System.out.println(line);
+                    {
+                        var csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(isr);
+                        for (var record : csvParser) {
+                            System.out.println(record.get("trip_id"));
+                            System.out.println(record.get("stop_id"));
+                            System.out.println(record.get("arrival_time"));
+                            System.out.println(record.get("departure_time"));
+                        }
                     }
                     break;
                 case "trips.txt":
-                    sc.nextLine();
-                    while (sc.hasNextLine()) {
-                        var line = sc.nextLine();
-                        String[] fields = ((String) line).split(",");
-                        trip.service_id.add(Integer.parseInt(fields[1]));
-                        System.out.println(line);
+                    {
+                        var csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(isr);
+                        for (var record : csvParser) {
+                            System.out.println(record.get("service_id"));
+                            System.out.println(record.get("trip_id"));
+                        }
                     }
                     break;
-            } */
+            }
         }
         zis.close();
-        sc.close();
     }
 }
-
-
 ```

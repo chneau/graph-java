@@ -49,3 +49,6 @@ In build.gradle:
 
 self reminder: this project is understood to be a library by Gradle thanks to `group 'chneau'` in build.gradle and `rootProject.name = 'graph'` in settings.gradle.
 
+## GTFS
+
+<https://en.m.wikipedia.org/wiki/File:GTFS_class_diagram.svg> <- contains useful diagram
