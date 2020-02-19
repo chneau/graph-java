@@ -43,6 +43,8 @@ In build.gradle:
 ```
 (self note: the project doesnt need a `group 'chneau'`)
 
+**IMPORTANT** if using vscode, git pull these projects and open them on the same workspace (yeah, reading the vscode problems tab was useful for once)
+
 ### misc
 
 self reminder: this project is understood to be a library by Gradle thanks to `group 'chneau'` in build.gradle and `rootProject.name = 'graph'` in settings.gradle.
