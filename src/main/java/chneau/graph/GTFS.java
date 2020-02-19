@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.zip.ZipInputStream;
-
 import org.apache.commons.csv.CSVFormat;
 
 public class GTFS {
@@ -23,11 +22,10 @@ public class GTFS {
         public double lng;
     }
 
-    public static class StopTime {
-        public LocalDateTime arrival;
-        public LocalDateTime departure;
+    public static class StopTime { // TOFIX
+        public String arrival;
+        public String departure;
     }
-
 
     private static boolean bool(String str) {
         if (str.equals("0")) {
@@ -44,6 +42,7 @@ public class GTFS {
 
         var calendars = new HashMap<String, Calendar>(); // service_id
         var stops = new HashMap<String, Stop>(); // stop_id
+        var stopTimes = new HashMap<String, StopTime>(); // trip_id+stop_id
 
         var yyyymmdd = DateTimeFormatter.ofPattern("yyyyMMdd");
 
@@ -74,7 +73,7 @@ public class GTFS {
                             var s = new Stop();
                             s.lat = Double.parseDouble("stop_lat");
                             s.lng = Double.parseDouble("stop_lon");
-                            stops.put(record.get("stop_id"),s);
+                            stops.put(record.get("stop_id"), s);
                         }
                     }
                     break;
@@ -82,10 +81,10 @@ public class GTFS {
                     {
                         var csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(isr);
                         for (var record : csvParser) {
-                            System.out.println(record.get("trip_id"));
-                            System.out.println(record.get("stop_id"));
-                            System.out.println(record.get("arrival_time"));
-                            System.out.println(record.get("departure_time"));
+                            var s = new StopTime();
+                            s.arrival = record.get("arrival_time");
+                            s.departure = record.get("departure_time");
+                            stopTimes.put(record.get("trip_id") + record.get("stop_id"), s);
                         }
                     }
                     break;
