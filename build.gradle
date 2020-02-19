@@ -1,8 +1,6 @@
 plugins {
     id 'java-library'
-    id "com.diffplug.gradle.spotless" version "3.25.0"
-    // id 'pmd'
-    // id 'com.github.spotbugs' version '2.0.0'
+    id 'com.diffplug.gradle.spotless' version '3.25.0'
 }
 
 group 'chneau'
@@ -14,8 +12,9 @@ repositories {
 dependencies {
     implementation 'com.graphhopper:graphhopper-core:0.13.0'
     implementation 'com.graphhopper:graphhopper-reader-osm:0.13.0'
-    implementation "chneau:openhours"
-    implementation "chneau:timetable"
+    implementation 'chneau:openhours'
+    implementation 'chneau:timetable'
+    implementation 'org.apache.commons:commons-csv:1.8'
     testImplementation 'junit:junit:4.12'
 }
 
@@ -24,10 +23,3 @@ spotless {
         googleJavaFormat().aosp()
     }
 }
-
-// tasks.withType(com.github.spotbugs.SpotBugsTask) {
-//   reports {
-//     xml.enabled = false
-//     html.enabled = true
-//   }
-// }
