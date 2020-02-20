@@ -1,31 +1,20 @@
 package chneau.graph;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Vertex {
-    public final Map<Integer, Integer> neighbours = new HashMap<>(); // TODO: Edge
-    public List<Integer> order = new ArrayList<>();
-
-    public void sort() {
-        Collections.sort(order, (Integer i, Integer j) -> neighbours.get(i) - neighbours.get(j));
-    }
+    public final Map<Integer, Edge> neighbours = new HashMap<>();
 
     public void addEdge(int to, int cost) {
+        var edge = new Edge();
+        edge.distance = (double) cost;
+        edge.speed = 1.;
         var val = neighbours.get(to);
         if (val != null) {
-            if (val == cost) {
-                return;
-            }
-            neighbours.put(to, cost);
-            sort();
+            neighbours.put(to, edge);
             return;
         }
-        neighbours.put(to, cost);
-        order.add(to);
-        sort();
+        neighbours.put(to, edge);
     }
 }
