@@ -22,9 +22,25 @@ public class Edge {
     public Double distance; // in m
     public Double speed; // in km/h
 
+
+    public Edge() {
+    }
+
+    public Edge(Double distance, Double speed) {
+        this.distance = distance;
+        this.speed = speed;
+    }
+
     public Duration getCost(LocalDateTime c) {
         Double v = distance / speed * 3600;
         return Duration.ofMillis(v.longValue());
+    }
+
+    public Edge plus(Edge other) {
+        var e = new Edge();
+        e.distance = distance + other.distance;
+        e.speed = (speed + other.speed)/2.;
+        return e;
     }
 
     @Override

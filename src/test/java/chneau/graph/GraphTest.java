@@ -1,25 +1,18 @@
 package chneau.graph;
 
-import static org.junit.Assert.assertEquals;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-
-import org.junit.Test;
-
 public class GraphTest {
-    @Test
-    public void testDijkstraSimple1() {
-        Graph g = new Graph();
-        g.addEdge(1, 2, 1);
-        g.addEdge(1, 3, 1);
-        g.addEdge(2, 4, 5);
-        g.addEdge(3, 4, 1);
-        g.addEdge(4, 5, 1);
-        var res = Dijkstra.shortest(g, 1, 5, LocalDateTime.now());
-        assertEquals(Arrays.asList(1, 3, 4, 5), res.path);
-        assertEquals(3, res.distance);
-    }
+    // @Test
+    // public void testDijkstraSimple1() {
+    //     Graph g = new Graph();
+    //     g.addEdge(1, 2, 1);
+    //     g.addEdge(1, 3, 1);
+    //     g.addEdge(2, 4, 5);
+    //     g.addEdge(3, 4, 1);
+    //     g.addEdge(4, 5, 1);
+    //     var res = Dijkstra.shortest(g, 1, 5, LocalDateTime.now());
+    //     assertEquals(Arrays.asList(1, 3, 4, 5), res.path);
+    //     assertEquals(3, res.distance);
+    // }
 
     // @Test
     // public void testDijkstraSimple2() {

@@ -39,7 +39,6 @@ public class Dijkstra {
         var toVisit = new LinkedList<Info>(); // to extends with insertOrdered *1
         insertOrdered(vertices.get(from), toVisit);
         while (toVisit.size() > 0) {
-            System.out.println(vertices);
             var visiting = popFront(toVisit);
             // todo: <Integer, LocalDateTime>
             var results = new HashMap<Integer, Duration>();

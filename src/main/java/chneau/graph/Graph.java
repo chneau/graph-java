@@ -6,18 +6,18 @@ import java.util.Map;
 public class Graph {
     public Map<Integer, Vertex> vertices = new HashMap<>();
 
-    public void addBiEdge(int from, int to, int cost) {
+    public void addBiEdge(int from, int to, Edge cost) {
         addEdge(from, to, cost);
         addEdge(to, from, cost);
     }
 
-    public void addEdge(int from, int to, int cost) {
+    public void addEdge(int from, int to, Edge edge) {
         if (!vertices.containsKey(from)) {
             vertices.put(from, new Vertex());
         }
         if (!vertices.containsKey(to)) {
             vertices.put(to, new Vertex());
         }
-        vertices.get(from).addEdge(to, cost);
+        vertices.get(from).addEdge(to, edge);
     }
 }
