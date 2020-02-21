@@ -36,7 +36,8 @@ public class GraphTest {
     //     g.addEdge(3, 4, 1);
     //     g.addEdge(4, 5, 1);
     //     Simplify.graph(g);
-    //     assertEquals(Arrays.asList(1, 5).stream().collect(Collectors.toSet()), g.vertices.keySet());
+    //     assertEquals(Arrays.asList(1, 5).stream().collect(Collectors.toSet()),
+    // g.vertices.keySet());
     //     assertEquals(Integer.valueOf(4), g.vertices.get(1).neighbours.get(5));
     // }
 
@@ -48,7 +49,8 @@ public class GraphTest {
     //     g.addBiEdge(3, 4, 1);
     //     g.addBiEdge(4, 5, 1);
     //     Simplify.graph(g);
-    //     assertEquals(Arrays.asList(1, 5).stream().collect(Collectors.toSet()), g.vertices.keySet());
+    //     assertEquals(Arrays.asList(1, 5).stream().collect(Collectors.toSet()),
+    // g.vertices.keySet());
     //     assertEquals(Integer.valueOf(4), g.vertices.get(1).neighbours.get(5));
     //     assertEquals(Integer.valueOf(4), g.vertices.get(5).neighbours.get(1));
     // }

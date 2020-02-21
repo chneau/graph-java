@@ -18,13 +18,11 @@ import java.time.LocalDateTime;
 //     }
 // }
 
-public class Edge {
+public class Edge implements Cost {
     public Double distance; // in m
     public Double speed; // in km/h
 
-
-    public Edge() {
-    }
+    public Edge() {}
 
     public Edge(Double distance, Double speed) {
         this.distance = distance;
@@ -39,13 +37,15 @@ public class Edge {
     public Edge plus(Edge other) {
         var e = new Edge();
         e.distance = distance + other.distance;
-        e.speed = (speed + other.speed)/2.;
+        var t1 = distance / speed;
+        var t2 = other.distance / other.speed;
+        e.speed = e.distance / (t1 + t2);
         return e;
     }
 
     @Override
     public String toString() {
-        return "Distance:"+distance+ " Speed:"+speed;
+        return "Distance:" + distance + " Speed:" + speed;
     }
 }
 

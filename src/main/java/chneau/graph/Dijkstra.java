@@ -54,7 +54,9 @@ public class Dijkstra {
                 if (!vertices.containsKey(id)) {
                     var newPath = new ArrayList<>(vertices.get(visiting.id).path);
                     newPath.add(id);
-                    var info = new Dijkstra.Info(id, newPath, vertices.get(visiting.id).distance.plus(v));
+                    var info =
+                            new Dijkstra.Info(
+                                    id, newPath, vertices.get(visiting.id).distance.plus(v));
                     vertices.put(id, info);
                     insertOrdered(info, toVisit);
                 } else {
@@ -111,7 +113,11 @@ public class Dijkstra {
         toVisit.add(i + 1, v);
     }
 
-    private static int calculateCost(Date clock, List<String> transportModes, int from, int to,
+    private static int calculateCost(
+            Date clock,
+            List<String> transportModes,
+            int from,
+            int to,
             HashMap<Integer, Info> vertices) {
         var time = clock.getTime();
         var X = 0; // update
@@ -141,13 +147,22 @@ public class Dijkstra {
         }
     }
 
-    private static int calcCarTime(int from, int to, HashMap<Integer, Info> vertices, double trafficFactor,
+    private static int calcCarTime(
+            int from,
+            int to,
+            HashMap<Integer, Info> vertices,
+            double trafficFactor,
             int redLightsTime) {
         var drivingTime = calcDistance(from, to, vertices) / 35;
         return (int) (trafficFactor * (redLightsTime + drivingTime));
     }
 
-    private static int calcBusTime(long time, int from, int to, HashMap<Integer, Info> vertices, double trafficFactor,
+    private static int calcBusTime(
+            long time,
+            int from,
+            int to,
+            HashMap<Integer, Info> vertices,
+            double trafficFactor,
             int redLightsTime) {
         var busStop = 0; // location
         var walkToBusTime = calcDistance(from, busStop, vertices) / 3;
@@ -157,7 +172,11 @@ public class Dijkstra {
         return (int) (trafficFactor * (redLightsTime + busTime) + walkToBusTime + waitForBusTime);
     }
 
-    private static int calcBicycleTime(int from, int to, HashMap<Integer, Info> vertices, double trafficFactor,
+    private static int calcBicycleTime(
+            int from,
+            int to,
+            HashMap<Integer, Info> vertices,
+            double trafficFactor,
             int redLightsTime) {
         var ridingTime = calcDistance(from, to, vertices) / 10;
         return (int) (trafficFactor * (redLightsTime + ridingTime));
