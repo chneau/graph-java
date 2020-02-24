@@ -7,11 +7,14 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipInputStream;
+
 import org.apache.commons.csv.CSVFormat;
 
 public class GTFS {
@@ -23,6 +26,17 @@ public class GTFS {
         public boolean[] days = new boolean[7];
         public LocalDateTime start;
         public LocalDateTime end;
+
+        public String daysAsString() {
+            var res = new ArrayList<String>();
+            var days = Arrays.asList("mo", "tu", "we", "th", "fr", "sa", "su");
+            for (int i = 0; i < this.days.length; i++) {
+                if (this.days[i]) {
+                    res.add(days.get(i));
+                }
+            }
+            return String.join(",", res);
+        }
     }
 
     public static class Stop {
@@ -128,7 +142,6 @@ public class GTFS {
                 calendarsByTrip.put(tripID, calendars.get(serviceID));
             }
         }
-        System.out.println(calendarsByTrip.size());
         zis.close();
         var gtfs = new GTFS();
         gtfs.calendars = calendarsByTrip;
