@@ -52,3 +52,7 @@ self reminder: this project is understood to be a library by Gradle thanks to `g
 ## GTFS
 
 <https://en.m.wikipedia.org/wiki/File:GTFS_class_diagram.svg> <- contains useful diagram
+
+## TODO
+
+- [ ] Build the OpenHours list without using strings (need to expose lib API)

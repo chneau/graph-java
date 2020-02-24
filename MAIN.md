@@ -132,3 +132,53 @@ public class Main {
     }
 }
 ```
+
+```java
+package chneau.graph;
+
+import java.util.HashMap;
+
+import chneau.openhours.OpenHours;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        var gtfs = GTFS.read("private/leeds.gtfs");
+        var stop_n = new HashMap<String, Integer>();
+        gtfs.stops.keySet().stream().forEach(stop_id -> stop_n.put(stop_id, stop_n.size()));
+        var stop_tt = new HashMap<String, OpenHours>();
+        var i = 0;
+        for (var kvv : gtfs.stopTimes.entrySet()) {
+            System.out.println(i++ + " "  + gtfs.stopTimes.size());
+            var trip_id = kvv.getKey();
+            var calendar = gtfs.calendars.get(trip_id);
+            var days = calendar.daysAsString();
+            for (var kv : kvv.getValue().entrySet()) {
+                var stop_id = kv.getKey();
+                var stopTime = kv.getValue();
+                // var stop = gtfs.stops.get(stop_id);
+                var s = days + " " + stopTime.arrival + "-" + stopTime.departure; // TODO fix departure == arrival
+                var oh = stop_tt.get(stop_id);
+                if (oh == null) {
+                    OpenHours newOh = null;
+                    try {
+                         newOh = OpenHours.parse(s);
+                     } catch (Exception e) { // avoiding idiots
+                         continue;
+                     }
+                     oh = newOh;
+                } else {
+                    OpenHours newOh = null;
+                    try {
+                         newOh = OpenHours.parse(s);
+                     } catch (Exception e) { // avoiding idiots
+                        continue;
+                    }
+                    oh = OpenHours.merge(oh, newOh);
+                }
+                stop_tt.put(stop_id, oh);
+            }
+        }
+    }
+}
+```
