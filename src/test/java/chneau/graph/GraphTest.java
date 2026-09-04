@@ -2,10 +2,16 @@ package chneau.graph;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -104,5 +110,56 @@ public class GraphTest {
         v.addEdge(3, 2);
         assertEquals(List.of(3, 2), v.order);
     }
-}
 
+    @Test
+    public void testGTFSParsing() throws Exception {
+        Path tempZip = Files.createTempFile("test-feed", ".gtfs");
+        try (var zos = new ZipOutputStream(new FileOutputStream(tempZip.toFile()))) {
+            // calendar.txt
+            zos.putNextEntry(new ZipEntry("calendar.txt"));
+            String calendarData = "service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date\n"
+                    + "SRV1,1,1,1,1,1,0,0,20260101,20261231\n";
+            zos.write(calendarData.getBytes());
+            zos.closeEntry();
+
+            // stops.txt
+            zos.putNextEntry(new ZipEntry("stops.txt"));
+            String stopsData = "stop_id,stop_name,stop_lat,stop_lon\n"
+                    + "ST1,Central Station,53.795,-1.547\n"
+                    + "ST2,North Station,53.805,-1.555\n";
+            zos.write(stopsData.getBytes());
+            zos.closeEntry();
+
+            // trips.txt
+            zos.putNextEntry(new ZipEntry("trips.txt"));
+            String tripsData = "route_id,service_id,trip_id\n"
+                    + "R1,SRV1,TRIP1\n";
+            zos.write(tripsData.getBytes());
+            zos.closeEntry();
+
+            // stop_times.txt
+            zos.putNextEntry(new ZipEntry("stop_times.txt"));
+            String stopTimesData = "trip_id,arrival_time,departure_time,stop_id,stop_sequence\n"
+                    + "TRIP1,08:00:00,08:05:00,ST1,1\n"
+                    + "TRIP1,08:20:00,08:22:00,ST2,2\n";
+            zos.write(stopTimesData.getBytes());
+            zos.closeEntry();
+        }
+
+        GTFS feed = GTFS.read(tempZip.toString());
+        assertNotNull(feed);
+        assertEquals(2, feed.stops.size());
+        assertTrue(feed.stops.containsKey("ST1"));
+        assertEquals(53.795, feed.stops.get("ST1").lat, 1e-4);
+
+        assertTrue(feed.calendars.containsKey("TRIP1"));
+        assertTrue(feed.calendars.get("TRIP1").days[0]); // monday
+        assertFalse(feed.calendars.get("TRIP1").days[5]); // saturday
+
+        assertTrue(feed.stopTimes.containsKey("TRIP1"));
+        assertEquals("08:00:00", feed.stopTimes.get("TRIP1").get("ST1").arrival);
+        assertEquals("08:20:00", feed.stopTimes.get("TRIP1").get("ST2").arrival);
+
+        Files.deleteIfExists(tempZip);
+    }
+}
