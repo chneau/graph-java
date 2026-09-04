@@ -56,11 +56,13 @@ public class GTFS {
 
         var yyyymmdd = DateTimeFormatter.ofPattern("yyyyMMdd");
 
+        var csvFormat = CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build();
+
         for (var e = zis.getNextEntry(); e != null; e = zis.getNextEntry()) {
             switch (e.getName()) {
                 case "calendar.txt":
                     {
-                        var csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(isr);
+                        var csvParser = csvFormat.parse(isr);
                         for (var record : csvParser) {
                             var c = new Calendar();
                             c.days[0] = bool(record.get("monday"));
@@ -82,7 +84,7 @@ public class GTFS {
                     break;
                 case "stops.txt":
                     {
-                        var csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(isr);
+                        var csvParser = csvFormat.parse(isr);
                         for (var record : csvParser) {
                             var s = new Stop();
                             s.lat = Double.parseDouble(record.get("stop_lat"));
@@ -93,7 +95,7 @@ public class GTFS {
                     break;
                 case "stop_times.txt":
                     {
-                        var csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(isr);
+                        var csvParser = csvFormat.parse(isr);
                         for (var record : csvParser) {
                             var s = new StopTime();
                             s.arrival = record.get("arrival_time");
@@ -107,7 +109,7 @@ public class GTFS {
                     break;
                 case "trips.txt":
                     {
-                        var csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(isr);
+                        var csvParser = csvFormat.parse(isr);
                         for (var record : csvParser) {
                             var sID = record.get("service_id");
                             var val = trips.getOrDefault(sID, new HashSet<>());
