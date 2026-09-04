@@ -1,0 +1,9 @@
+{
+  "name": "graph-java",
+  "private": true,
+  "scripts": {
+    "build": "./gradlew build",
+    "test": "./gradlew test",
+    "bench": "./gradlew bench -q"
+  }
+}
