@@ -21,8 +21,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'chneau:openhours:1.0.0'
-    implementation 'chneau:timetable:1.0.0'
     implementation 'org.apache.commons:commons-csv:1.13.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
